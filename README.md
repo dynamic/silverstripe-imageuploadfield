@@ -23,7 +23,7 @@ SilverStripe UploadField pre-configured for Image uploads. Allows max file size 
 What it does:
 
 * sets `AllowedMaxFileNumber` to 1
-* sets `AllowedFileCategories` to `Image
+* sets `AllowedFileCategories` to Image
 * sets `AllowedMaxFileSize` to 1 MB
 
 You can overwrite the `AllowedMaxFileSize` value in config.yml:
