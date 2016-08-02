@@ -2,8 +2,17 @@
 
 class ImageUploadField extends UploadField
 {
+    /**
+     * @var int
+     */
     private static $max_upload = 1024000;
 
+    /**
+     * ImageUploadField constructor.
+     * @param string $name
+     * @param null $title
+     * @param SS_List|null $items
+     */
     public function __construct($name, $title = null, SS_List $items = null)
     {
         parent::__construct($name, $title);
