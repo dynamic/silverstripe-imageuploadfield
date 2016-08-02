@@ -1,0 +1,3 @@
+{
+    "MyModule.TRANSLATABLE": "Translatable",
+}
