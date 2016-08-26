@@ -16,21 +16,6 @@ SilverStripe UploadField pre-configured for Image uploads. Allows max file size 
 
 	composer require dynamic/silverstripe-imageuploadfield
 
-## Example usage
-
-	$imageField = ImageUploadField::create('Image', 'Image');
-
-What it does:
-
-* sets `AllowedMaxFileNumber` to 1
-* sets `AllowedFileCategories` to Image
-* sets `AllowedMaxFileSize` to 1 MB
-
-You can overwrite the `AllowedMaxFileSize` value in config.yml:
-
-	ImageUploadField:
-		max_upload: 512000
-
 ## Documentation
 
 See the [docs/en](docs/en/index.md) folder.
