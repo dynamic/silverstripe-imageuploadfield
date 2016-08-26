@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class ImageUploadField
+ */
 class ImageUploadField extends UploadField
 {
     /**
