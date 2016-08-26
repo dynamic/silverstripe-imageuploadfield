@@ -28,6 +28,24 @@ class ImageUploadFieldTest extends SapphireTest
     /**
      *
      */
+    public function testINIUploadLimitCheck()
+    {
+        $iniMax = File::ini2bytes(ini_get('post_max_size'));
+        $over = $iniMax * 2;
+        $under = $iniMax / 2;
+
+        Config::inst()->update('ImageUploadField', 'max_upload', $over);
+        $imageField = ImageUploadField::create('testField');
+        $this->assertEquals($imageField->getValidator()->getAllowedMaxFileSize(), $iniMax);
+
+        Config::inst()->update('ImageUploadField', 'max_upload', $under);
+        $imageField2 = ImageUploadField::create('testField2');
+        $this->assertEquals($imageField2->getValidator()->getAllowedMaxFileSize(), $under);
+    }
+
+    /**
+     *
+     */
     public function testExtendedField()
     {
 
