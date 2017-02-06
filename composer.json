@@ -24,6 +24,9 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "extra": {
-        "installer-name": "imageuploadfield"
+        "installer-name": "imageuploadfield",
+		"branch-alias": {
+      		"dev-master": "1.0.x-dev"
+    	}
     }
 }
