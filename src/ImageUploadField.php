@@ -49,9 +49,9 @@ class ImageUploadField extends UploadField
         // other image specific options
         $this->setAllowedMaxFileNumber(1);
 
-        $category = Injector::inst()->get(static::class)->config()->get('category');
+        $category = static::config()->get('category');
 
-        if (!in_array($this->config()->get('allowed_categories'), $category)) {
+        if (!in_array($category, $this->config()->get('allowed_categories'))) {
             user_error("{$category} not listed in ImageUploadField::allowed_categories. Defaulting to \"image/supported\"");
             $category = 'image/supported';
         }
