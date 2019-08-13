@@ -14,7 +14,7 @@ SilverStripe UploadField pre-configured for Image uploads. Allows max file size 
 
 ## Installation
 
-`composer require dynamic/imageuploadfield ^4.0`
+`composer require dynamic/imageuploadfield ^2.0`
 
 ## Documentation
 
