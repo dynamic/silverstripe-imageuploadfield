@@ -1,54 +1,33 @@
-
 language: php
-
-sudo: false
-
-addons:
-  apt:
-    packages:
-      - tidy
-
-before_install:
-  - pip install --user codecov
 
 env:
   global:
-    - DB=MYSQL CORE_RELEASE=3.4
-    - MODULE_PATH=imageuploadfield
-    - COVERAGE=0
+    - TRAVIS_NODE_VERSION="10"
 
 matrix:
   include:
-    - php: 5.6
-      env: DB=SQLITE
-    - php: 5.6
-      env: DB=PGSQL
-    - php: 5.6
-      env: COVERAGE=1
     - php: 7.0
-      env: CORE_RELEASE=master
-  allow_failures:
-    - php: 7.0
-      env: CORE_RELEASE=master
-
+      env: DB=PGSQL RECIPE_VERSION=4.2.x-dev PHPUNIT_TEST=1
+    - php: 7.1
+      env: DB=MYSQL RECIPE_VERSION=4.3.x-dev PHPUNIT_TEST=1
+    - php: 7.2
+      env: DB=PGSQL RECIPE_VERSION=4.4.x-dev PHPUNIT_TEST=1 PHPCS_TEST=1
+    - php: 7.3
+      env: DB=MYSQL RECIPE_VERSION=4.x-dev PHPUNIT_TEST=1 PHPUNIT_COVERAGE_TEST=1
 
 before_script:
   - phpenv rehash
-  - composer self-update || true
-  - git clone git://github.com/silverstripe-labs/silverstripe-travis-support.git ~/travis-support
-  - php ~/travis-support/travis_setup.php --source `pwd` --target ~/builds/ss
-  - cd ~/builds/ss
+  - phpenv config-rm xdebug.ini
+
+  - composer validate
+  - composer require --no-update silverstripe/recipe-cms:"$RECIPE_VERSION"
+  - if [[ $DB == PGSQL ]]; then composer require --no-update silverstripe/postgresql:2.1.x-dev; fi
+  - composer install --prefer-source --no-interaction --no-progress --no-suggest --optimize-autoloader --verbose --profile
 
 script:
-  # Execute tests with no coverage.  This is the fastest option
-  - "if [ \"$COVERAGE\" = \"0\" ]; then vendor/bin/phpunit $MODULE_PATH/tests/; fi"
+  - if [[ $PHPUNIT_TEST ]]; then vendor/bin/phpunit; fi
+  - if [[ $PHPUNIT_COVERAGE_TEST ]]; then phpdbg -qrr vendor/bin/phpunit --coverage-clover=coverage.xml; fi
+  - if [[ $PHPCS_TEST ]]; then vendor/bin/phpcs src/ tests/ *.php; fi
 
-  # Execute tests with coverage.  Do this for a small
-  - "if [ \"$COVERAGE\" = \"1\" ]; then vendor/bin/phpunit --coverage-clover=coverage.clover $MODULE_PATH/tests/; fi"
-
-after_script:
-  - "if [ \"$COVERAGE\" = \"1\" ]; then mv coverage.clover ~/build/$TRAVIS_REPO_SLUG/; fi"
-  - cd ~/build/$TRAVIS_REPO_SLUG
-  - wget https://scrutinizer-ci.com/ocular.phar
-  - "if [ \"$COVERAGE\" = \"1\" ]; then travis_retry codecov && travis_retry php ocular.phar code-coverage:upload --format=php-clover coverage.clover; fi"
-
+after_success:
+  - if [[ $PHPUNIT_COVERAGE_TEST ]]; then bash <(curl -s https://codecov.io/bash) -f coverage.xml -F php; fi

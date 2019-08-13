@@ -1,5 +1,14 @@
 <?php
 
+namespace Dynamic\ImageUpload\Tests;
+
+use Dynamic\ImageUpload\ImageUploadField;
+use Dynamic\ImageUpload\Tests\Field\CustomImageUploadField;
+use SilverStripe\AssetAdmin\Forms\UploadField;
+use SilverStripe\Core\Config\Config;
+use SilverStripe\Core\Convert;
+use SilverStripe\Dev\SapphireTest;
+
 /**
  * Class ImageUploadFieldTest
  */
@@ -11,8 +20,8 @@ class ImageUploadFieldTest extends SapphireTest
      */
     public function test__construct()
     {
-        $field = new ImageUploadField('Image');
-        $this->assertInstanceOf('UploadField', $field);
+        $field = ImageUploadField::create('Image');
+        $this->assertInstanceOf(UploadField::class, $field);
     }
 
     /**
@@ -20,9 +29,9 @@ class ImageUploadFieldTest extends SapphireTest
      */
     public function testMaxUpload()
     {
-        $this->assertEquals(Config::inst()->get('ImageUploadField', 'max_upload'), 1024000);
-        Config::inst()->update('ImageUploadField', 'max_upload', 512000);
-        $this->assertEquals(Config::inst()->get('ImageUploadField', 'max_upload'), 512000);
+        $this->assertEquals(ImageUploadField::config()->get('ImageUploadField', 'max_upload'), 1024000);
+        Config::modify()->set(ImageUploadField::class, 'max_upload', 512000);
+        $this->assertEquals(ImageUploadField::config()->get('ImageUploadField', 'max_upload'), 512000);
     }
 
     /**
@@ -30,15 +39,15 @@ class ImageUploadFieldTest extends SapphireTest
      */
     public function testINIUploadLimitCheck()
     {
-        $iniMax = File::ini2bytes(ini_get('post_max_size'));
+        $iniMax = Convert::memstring2bytes(ini_get('post_max_size'));
         $over = $iniMax * 2;
         $under = $iniMax / 2;
 
-        Config::inst()->update('ImageUploadField', 'max_upload', $over);
+        Config::modify()->set(ImageUploadField::class, 'max_upload', $over);
         $imageField = ImageUploadField::create('testField');
         $this->assertEquals($imageField->getValidator()->getAllowedMaxFileSize(), $iniMax);
 
-        Config::inst()->update('ImageUploadField', 'max_upload', $under);
+        Config::modify()->set(ImageUploadField::class, 'max_upload', $under);
         $imageField2 = ImageUploadField::create('testField2');
         $this->assertEquals($imageField2->getValidator()->getAllowedMaxFileSize(), $under);
     }
@@ -49,26 +58,13 @@ class ImageUploadFieldTest extends SapphireTest
     public function testExtendedField()
     {
 
-        $imageField = new CustomImageUploadField('testImageField');
+        $imageField = CustomImageUploadField::create('testImageField');
         $this->assertEquals($imageField->getValidator()->getAllowedMaxFileSize(), 512000);
 
         Config::inst()->update('CustomImageUploadField', 'max_upload', 256000);
         $imageField2 = new CustomImageUploadField('testImageField2');
         $this->assertEquals($imageField2->getValidator()->getAllowedMaxFileSize(), 256000);
-
     }
 
 }
 
-/**
- * Class CustomImageUploadField
- */
-class CustomImageUploadField extends ImageUploadField implements TestOnly
-{
-
-    /**
-     * @var int
-     */
-    private static $max_upload = 512000;
-
-}
