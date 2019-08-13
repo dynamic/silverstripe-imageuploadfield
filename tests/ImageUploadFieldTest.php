@@ -68,4 +68,3 @@ class ImageUploadFieldTest extends SapphireTest
         $this->assertEquals($imageField2->getValidator()->getAllowedMaxFileSize(), 256000);
     }
 }
-

@@ -52,7 +52,9 @@ class ImageUploadField extends UploadField
         $category = static::config()->get('category');
 
         if (!in_array($category, $this->config()->get('allowed_categories'))) {
-            user_error("{$category} not listed in ImageUploadField::allowed_categories. Defaulting to \"image/supported\"");
+            $msg = "{$category} not listed in ImageUploadField::allowed_categories. Defaulting to \"image/supported\"";
+            user_error($msg);
+
             $category = 'image/supported';
         }
 
