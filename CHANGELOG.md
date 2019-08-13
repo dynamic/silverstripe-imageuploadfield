@@ -1,7 +1,19 @@
 # Change Log
 
-## [Unreleased](https://github.com/dynamic/silverstripe-imageuploadfield/tree/HEAD)
+## [2.0.0](https://github.com/dynamic/silverstripe-imageuploadfield/tree/2.0.0) (2019-08-12)
+[Full Changelog](https://github.com/dynamic/silverstripe-imageuploadfield/compare/1.0.0...2.0.0)
 
+**Implemented enhancements:**
+
+- UPGRADE SS 4 compatability [\#8](https://github.com/dynamic/silverstripe-imageuploadfield/issues/8)
+- Max Upload check [\#4](https://github.com/dynamic/silverstripe-imageuploadfield/issues/4)
+
+**Merged pull requests:**
+
+- UPDATE SilverStripe 4 compatibility [\#9](https://github.com/dynamic/silverstripe-imageuploadfield/pull/9) ([muskie9](https://github.com/muskie9))
+- Tests - Travis and Scrut tweaks [\#7](https://github.com/dynamic/silverstripe-imageuploadfield/pull/7) ([jsirish](https://github.com/jsirish))
+
+## [1.0.0](https://github.com/dynamic/silverstripe-imageuploadfield/tree/1.0.0) (2016-08-26)
 **Closed issues:**
 
 - Add to packagist [\#2](https://github.com/dynamic/silverstripe-imageuploadfield/issues/2)
